@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LezhinImageExample</string>
+    <string name="et_query_hint">검색어를 입력해주세요</string>
 </resources>

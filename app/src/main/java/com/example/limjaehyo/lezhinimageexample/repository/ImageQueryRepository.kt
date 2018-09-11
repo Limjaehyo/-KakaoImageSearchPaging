@@ -6,21 +6,21 @@ import com.example.limjaehyo.lezhinimageexample.util.CommonUtil
 import io.reactivex.Single
 import java.util.LinkedHashMap
 
-class IamgeQueryRepository : BaseRepository<ImageQueryModel>() {
+class ImageQueryRepository : BaseRepository<ImageQueryModel>() {
     var query: String =""
     var sort: String = "recency"
     var page : Int = 1
     var size : Int = 80
 
     companion object {
-        private var ourInstance: IamgeQueryRepository? = null
+        private var ourInstance: ImageQueryRepository? = null
         @JvmStatic
-        val instance: IamgeQueryRepository
+        val instance: ImageQueryRepository
             get() {
                 if (ourInstance == null) {
-                    synchronized(IamgeQueryRepository::class) {
+                    synchronized(ImageQueryRepository::class) {
                         if (ourInstance == null) {
-                            ourInstance = IamgeQueryRepository()
+                            ourInstance = ImageQueryRepository()
                         }
                     }
                 }

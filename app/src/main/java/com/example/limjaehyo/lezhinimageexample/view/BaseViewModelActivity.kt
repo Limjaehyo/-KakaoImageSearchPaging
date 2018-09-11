@@ -75,6 +75,10 @@ abstract class BaseViewModelActivity<T : ViewModel> : AppCompatActivity() {
     fun getDisposable(): CompositeDisposable {
         return observer.getDisposable()
     }
+    fun getNetWorkDisposable(): CompositeDisposable {
+        return observer.getNetWorkDisposable()
+    }
+
 
     fun showCustomDialog(context: Context, msg: String): MaterialDialog {
         this.materialDialog = MaterialDialog.Builder(context).build()

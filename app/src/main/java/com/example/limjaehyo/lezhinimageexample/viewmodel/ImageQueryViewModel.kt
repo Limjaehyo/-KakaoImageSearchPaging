@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.util.Log
 import com.example.limjaehyo.lezhinimageexample.model.datasource.ImageQueryModel
-import com.example.limjaehyo.lezhinimageexample.repository.IamgeQueryRepository
+import com.example.limjaehyo.lezhinimageexample.repository.ImageQueryRepository
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -17,9 +17,9 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
         return  null!!
     }
 
-    override fun getSingle(query: String): Single<ImageQueryModel> {
+    override fun getSingle(args: String): Single<ImageQueryModel> {
 
-        return IamgeQueryRepository.instance.getResponse(query)
+        return ImageQueryRepository.instance.getResponse(args)
     }
 
     fun getQueryImages(query: String) {
