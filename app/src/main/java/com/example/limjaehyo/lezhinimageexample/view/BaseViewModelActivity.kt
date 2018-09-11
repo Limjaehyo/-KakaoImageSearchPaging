@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import com.afollestad.materialdialogs.MaterialDialog
@@ -24,8 +23,8 @@ abstract class BaseViewModelActivity<T : ViewModel> : AppCompatActivity() {
     private var materialDialog: MaterialDialog? = null
 
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         val lifecycle = this.lifecycle
         observer = DisposableLifecycleObserver(lifecycle)
         lifecycle.addObserver(observer)
@@ -51,11 +50,14 @@ abstract class BaseViewModelActivity<T : ViewModel> : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        observer.enable()
+        if (::observer.isInitialized) {
+            observer.enable()
+        }
+
     }
 
 
-    protected fun putDisposableMap(tag: String, disposable: Disposable) {
+    protected open fun putDisposableMap(tag: String, disposable: Disposable) {
         observer.putDisposableMap(tag, disposable)
 
     }

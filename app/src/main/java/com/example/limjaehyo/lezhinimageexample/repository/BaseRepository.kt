@@ -14,29 +14,29 @@ abstract class BaseRepository<T> : getResponseInterFace<BaseModel> {
      * @param apiKey //apiKey를 받아 세팅한다.
      * @return 기본 QueryMap + Values Map
      */
-    protected fun getQuery( apiKey: String): Map<String, String> {
-        val map = getDefaultMap( apiKey)
+    protected fun getQuery( ): Map<String, String> {
+        val map = getDefaultMap()
 
 
         //추가적으로 자식에서 구현받은 map key Values 룰 저장한다. key 값으로 받아온 values 값이 빈경우 넣지 않는ㄴ다.
         for (key in queryValuesMap().keys) {
             if (!queryValuesMap().isEmpty()) {
-                map[key] = queryValuesMap()[key]
+                map[key] = queryValuesMap()[key]!!
             }
         }
         return map
     }
 
 
-    private fun getDefaultMap( apiKey: String): LinkedHashMap<String, String> {
+    private fun getDefaultMap( ): LinkedHashMap<String, String> {
         val map = LinkedHashMap<String,String>()
         //기본적으로 들어갈 키
-        map["apiKey"] = apiKey
+//        map["apiKey"] = apiKey
 
         return map
     }
 
-    protected fun getValuesMap(): LinkedHashMap<String, String> {
+    protected  fun getValuesMap(): LinkedHashMap<String, String> {
         return LinkedHashMap()
     }
 }

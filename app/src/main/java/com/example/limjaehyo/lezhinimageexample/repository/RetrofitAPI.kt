@@ -1,14 +1,14 @@
 package com.example.limjaehyo.lezhinimageexample.repository
 
+import com.example.limjaehyo.lezhinimageexample.model.datasource.ImageQueryModel
+import io.reactivex.Single
+import retrofit2.http.GET
+import retrofit2.http.QueryMap
+
 interface RetrofitAPI {
 
-    /*
-   @GET("/APP/send.php")
-   Observable<Object> getGoodsDetail(@Query("apiKey") String apiKey, @Query("agentCode") String agentCode,
-                                                  @Query("agent") String agent,
-                                                  @Query("device") String device, @Query("option") String option,
-                                                  @Query("test") String test, @Query("pcode") String pcode, @Query("user_id") String userID);
-*/
+   @GET("/v2/search/image")
+  fun getSearchImage(@QueryMap value : Map<String, String>) :  Single<ImageQueryModel>
 
 
 }
