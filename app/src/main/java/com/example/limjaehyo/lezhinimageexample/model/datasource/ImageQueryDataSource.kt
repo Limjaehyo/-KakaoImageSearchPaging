@@ -11,8 +11,7 @@ import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
 
 
-class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable, private val query: String,private  val sort : String,
-                           private val liveData: MutableLiveData<MutableList<ImageQueryModel.Documents>>)
+class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable, private val query: String,private  val sort : String)
     : PageKeyedDataSource<Int, ImageQueryModel.Documents>() {
 
      var networkStateLiveData: MutableLiveData<NetworkState> = MutableLiveData()
@@ -26,15 +25,14 @@ class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable,
                 .subscribeOn(Schedulers.io())
                 .subscribe({ imageQueryList ->
                     setRetry(null)
-                    networkStateLiveData.postValue(NetworkState.LOADED)
                     initialLoad.postValue(NetworkState.LOADED)
+                    networkStateLiveData.postValue(NetworkState.LOADED)
                     callback.onResult(imageQueryList.documents, null, 2)
 
                 }) { throwable ->
                     setRetry(Action { loadInitial(params, callback) })
                     networkStateLiveData.postValue(NetworkState.error(throwable.message))
                     initialLoad.postValue(NetworkState.error(throwable.message))
-                    Log.e("loadInitial_throwable3", throwable.localizedMessage)
                 })
     }
 
@@ -52,7 +50,6 @@ class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable,
                 }, { throwable ->
                     setRetry(Action { loadAfter(params, callback) })
                     networkStateLiveData.postValue(NetworkState.error(throwable.message))
-                    Log.e("loadAfter_throwable", throwable.message)
                 }))
 
     }

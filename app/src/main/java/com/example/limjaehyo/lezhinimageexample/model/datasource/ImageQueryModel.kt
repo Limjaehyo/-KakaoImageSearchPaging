@@ -27,12 +27,15 @@ class ImageQueryModel(@SerializedName("meta") var meta: Meta, @SerializedName("d
         //섬네일 이미
        @SerializedName("thumbnail_url")
         var thumbnail_url: String = ""
-        @SerializedName("image_url")
+
         //	이미지 URL
+        @SerializedName("image_url")
         var image_url: String = ""
+
         //	이미지 가로크기
         @SerializedName("width")
         var width: String = ""
+
         //	이미지 세로크기
         @SerializedName("height")
         var height: String = ""

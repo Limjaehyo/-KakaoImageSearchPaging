@@ -7,15 +7,12 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
-import android.util.Log
 import com.example.limjaehyo.lezhinimageexample.model.datasource.ImageQueryDataSource
 import com.example.limjaehyo.lezhinimageexample.model.datasource.ImageQueryDataSourceFactory
 import com.example.limjaehyo.lezhinimageexample.model.datasource.ImageQueryModel
 import com.example.limjaehyo.lezhinimageexample.model.datasource.NetworkState
 import com.example.limjaehyo.lezhinimageexample.repository.ImageQueryRepository
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -29,7 +26,7 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
 
 
     init {
-        executor = Executors.newFixedThreadPool(5)
+        executor = Executors.newFixedThreadPool(4)
     }
 
 
@@ -50,11 +47,11 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
         userList = LivePagedListBuilder(imageListDataSource, 20)
                 .setFetchExecutor(executor)
                 .build()
-        viewModelInterface.getqueryImages(userList)
+        viewModelInterface.getQueryImages(userList)
 
     }
 
-    fun getQueryImages(query: String) {
+/*    fun getQueryImages1(query: String) {
         viewModelInterface.putDisposableMap("list",
                 getSingle(query).subscribeOn(Schedulers.io())
                         .doOnSubscribe { isProgress.set(true) }
@@ -70,7 +67,7 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
                         })
         )
 
-    }
+    }*/
 
     fun retry() {
         imageListDataSource.sourceFactoryLiveData.value!!.retry()
@@ -90,6 +87,6 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
     }
 
     interface ImageQueryViewModelInterface : BaseVewModelInterface {
-        fun getqueryImages(items: LiveData<PagedList<ImageQueryModel.Documents>>)
+        fun getQueryImages(items: LiveData<PagedList<ImageQueryModel.Documents>>)
     }
 }
