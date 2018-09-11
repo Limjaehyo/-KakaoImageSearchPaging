@@ -7,7 +7,10 @@
     tools:context=".view.ImageDetailActivity">
 
     <ScrollView
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        fresco:layout_constraintStart_toStartOf="parent"
+        fresco:layout_constraintEnd_toEndOf="parent"
+        fresco:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content">
 
         <android.support.constraint.ConstraintLayout
@@ -54,6 +57,12 @@
                 fresco:layout_constraintEnd_toEndOf="@+id/end_guideline"
                 fresco:layout_constraintStart_toStartOf="@+id/start_guideline"
                 fresco:layout_constraintTop_toBottomOf="@+id/tv_departure" />
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="@dimen/detail_view_text_top"
+                fresco:layout_constraintStart_toStartOf="parent"
+                fresco:layout_constraintEnd_toEndOf="parent"
+                fresco:layout_constraintTop_toBottomOf="@+id/tv_doc_url"/>
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 
