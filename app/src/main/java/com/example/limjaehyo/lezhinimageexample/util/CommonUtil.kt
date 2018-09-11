@@ -1,5 +1,6 @@
 package com.example.limjaehyo.lezhinimageexample.util
 
+import android.content.Context
 import com.example.limjaehyo.lezhinimageexample.BuildConfig
 import com.example.limjaehyo.lezhinimageexample.repository.RetrofitAPI
 import com.google.gson.GsonBuilder
@@ -46,6 +47,14 @@ class CommonUtil {
 
             return retrofit.create(RetrofitAPI::class.java)
         }
+        fun getWidth(context: Context): Int {
+           val dm = context.applicationContext.resources.displayMetrics
+           return dm.widthPixels
+       }
+
+       fun  getRatioHeight(context: Context , originHeight : Int ,originWidth : Int) : Int{
+           return (originHeight.toFloat() * getWidth(context) / originWidth.toFloat()).toInt()
+       }
     }
 
 }

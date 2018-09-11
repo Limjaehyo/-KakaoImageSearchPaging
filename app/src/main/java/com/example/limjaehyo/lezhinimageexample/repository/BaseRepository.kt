@@ -4,7 +4,7 @@ import com.example.limjaehyo.lezhinimageexample.model.datasource.BaseModel
 
 
 abstract class BaseRepository<T> : getResponseInterFace<BaseModel> {
- val REST_API  : String = "76b08acf0079a56ec963bd146ea42e58"
+
 
     /**
      * 기본적인 커리를 완성하여 리턴하며 추가적으로 Map 형태의 Values 를 받아 세팅한다.
@@ -31,7 +31,6 @@ abstract class BaseRepository<T> : getResponseInterFace<BaseModel> {
     private fun getDefaultMap( ): LinkedHashMap<String, String> {
         val map = LinkedHashMap<String,String>()
         //기본적으로 들어갈 키
-//        map["apiKey"] = apiKey
 
         return map
     }

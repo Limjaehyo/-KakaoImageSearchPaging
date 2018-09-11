@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.PageKeyedDataSource
 import android.util.Log
 import com.example.limjaehyo.lezhinimageexample.repository.ImageQueryRepository
+import com.example.limjaehyo.lezhinimageexample.viewmodel.ImageQueryViewModel
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -11,7 +12,7 @@ import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
 
 
-class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable, private val query: String, private val sort: String)
+class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable, private val query: String, private val sort: String,private  val viewModelInterface: ImageQueryViewModel.ImageQueryViewModelInterface)
     : PageKeyedDataSource<Int, ImageQueryModel.Documents>() {
 
     var networkStateLiveData: MutableLiveData<NetworkState> = MutableLiveData()
@@ -33,7 +34,7 @@ class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable,
                     callback.onResult(imageQueryList.documents, null, 2)
 
                 }) { throwable ->
-                    Log.e("loadInitial", throwable.message);
+                    viewModelInterface.showMessageDialog(throwable?.message?:"")
                     setRetry(Action { loadInitial(params, callback) })
                     networkStateLiveData.postValue(NetworkState.error(throwable.message))
                     initialLoad.postValue(NetworkState.error(throwable.message))
@@ -76,7 +77,8 @@ class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable,
             compositeDisposable.add(retryCompletable!!
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ }, { throwable -> Log.e("retry", throwable.message) }))
+                    .subscribe({
+                    }, { throwable -> Log.e("retry", throwable.message) }))
         }
     }
 }

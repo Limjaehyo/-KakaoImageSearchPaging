@@ -44,7 +44,7 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
 
     fun getQueryImagesPaging(paging: String, sort: String) {
 
-        imageListDataSource = ImageQueryDataSourceFactory(compositeDisposable, paging, sort)
+        imageListDataSource = ImageQueryDataSourceFactory(compositeDisposable, paging, sort,viewModelInterface)
         netWorkState = Transformations.switchMap<ImageQueryDataSource, NetworkState>(imageListDataSource.sourceFactoryLiveData) { it.networkStateLiveData }
         refreshState = Transformations.switchMap<ImageQueryDataSource, NetworkState>(imageListDataSource.sourceFactoryLiveData) { it.initialLoad }
         dataState = Transformations.switchMap<ImageQueryDataSource, Boolean>(imageListDataSource.sourceFactoryLiveData) { it.isData }
@@ -58,24 +58,7 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
 
     }
 
-/*    fun getQueryImages1(query: String) {
-        viewModelInterface.putDisposableMap("list",
-                getSingle(query).subscribeOn(Schedulers.io())
-                        .doOnSubscribe { isProgress.set(true) }
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ item: ImageQueryModel ->
-                            run {
-                                Log.e("dd", item.documents[0].image_url)
-                            }
-                        }, { throwable: Throwable ->
-                            run {
-                                throwable.message?.let { viewModelInterface.showMessageDialog(it) }
-                            }
-                        })
-        )
-
-    }*/
-
+    //새로고침 호츨 메소드
     fun retry() {
         imageListDataSource.sourceFactoryLiveData.value!!.retry()
     }

@@ -16,6 +16,7 @@ import com.example.limjaehyo.lezhinimageexample.R
 import com.example.limjaehyo.lezhinimageexample.model.datasource.ImageQueryModel
 import com.example.limjaehyo.lezhinimageexample.model.datasource.NetworkState
 import com.example.limjaehyo.lezhinimageexample.model.datasource.Status
+import com.example.limjaehyo.lezhinimageexample.util.CommonUtil
 import com.example.limjaehyo.lezhinimageexample.view.ImageDetailActivity
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.controller.BaseControllerListener
@@ -24,7 +25,7 @@ import com.facebook.imagepipeline.image.ImageInfo
 import kotlinx.android.synthetic.main.item_network_state.view.*
 
 
-class ImageAdapter(private val context :Context, var deviceWidth : Int, private val retryCallback: () -> Unit) : PagedListAdapter<ImageQueryModel.Documents,RecyclerView.ViewHolder>(ImageDiffCallback){
+class ImageAdapter(private val context :Context, private val retryCallback: () -> Unit) : PagedListAdapter<ImageQueryModel.Documents,RecyclerView.ViewHolder>(ImageDiffCallback){
     private var networkState: NetworkState? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -37,7 +38,7 @@ class ImageAdapter(private val context :Context, var deviceWidth : Int, private 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            R.layout.item_image -> (holder as ImageItemViewHolder).bindTo(context,getItem(position),deviceWidth)
+            R.layout.item_image -> (holder as ImageItemViewHolder).bindTo(context,getItem(position))
             R.layout.item_network_state -> (holder as NetworkStateViewHolder).bindTo(networkState)
         }
     }
@@ -77,12 +78,7 @@ class ImageAdapter(private val context :Context, var deviceWidth : Int, private 
             }
         }
     }
-    fun setDataReset(){
-        if (currentList != null) {
-            currentList?.dataSource?.invalidate()
 
-        }
-    }
 
     companion object {
         val ImageDiffCallback = object : DiffUtil.ItemCallback<ImageQueryModel.Documents>() {
@@ -125,16 +121,18 @@ class ImageAdapter(private val context :Context, var deviceWidth : Int, private 
 
     class ImageItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bindTo(context: Context ,imageDoc: ImageQueryModel.Documents?, deviceWidth : Int) {
+        fun bindTo(context: Context ,imageDoc: ImageQueryModel.Documents?) {
             val simpleDraweeView = itemView.findViewById(R.id.my_image_view) as SimpleDraweeView
             val controllerBuilder = Fresco.newDraweeControllerBuilder()
             controllerBuilder.setUri(imageDoc?.thumbnail_url)
             controllerBuilder.oldController = simpleDraweeView.controller
-            val height = (imageDoc?.height?.toFloat()!! * deviceWidth.toFloat() / imageDoc.width.toFloat()).toInt()
+
+            val ratioHeight = CommonUtil.getRatioHeight(context,imageDoc?.height?.toInt()?:0, imageDoc?.width?.toInt()?:0)
                     val layoutParams = simpleDraweeView.layoutParams
-                    layoutParams.width = deviceWidth /2
-                    layoutParams.height = height /2
+                    layoutParams.width = CommonUtil.getWidth(context)
+                    layoutParams.height = ratioHeight /2
                     simpleDraweeView.layoutParams = layoutParams
+
             controllerBuilder.controllerListener = object : BaseControllerListener<ImageInfo>() {
                 override fun onFinalImageSet(id: String?, imageInfo: ImageInfo?, animatable: Animatable?) {
                     super.onFinalImageSet(id, imageInfo, animatable)
@@ -146,11 +144,10 @@ class ImageAdapter(private val context :Context, var deviceWidth : Int, private 
                 }
             }
             simpleDraweeView.controller = controllerBuilder.build()
+
             val intent = Intent(context, ImageDetailActivity::class.java)
-            val bundle = Bundle()
-            bundle.putParcelable("item",imageDoc)
-            intent.putExtra("bundle",bundle)
-            simpleDraweeView.setOnClickListener { view: View? -> context.startActivity(intent) }
+            intent.putExtra("item",imageDoc)
+            simpleDraweeView.setOnClickListener { _: View? -> context.startActivity(intent) }
 
         }
 

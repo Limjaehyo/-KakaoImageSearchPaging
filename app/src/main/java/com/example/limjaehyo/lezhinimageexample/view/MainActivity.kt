@@ -80,7 +80,7 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
     }
 
     private fun adapterInit() {
-        adapter = ImageAdapter(this, getWidth()) {
+        adapter = ImageAdapter(this) {
             mViewModel?.retry()
         }
         setStaggeredSetting()
@@ -145,8 +145,5 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
         super.putDisposableMap(tag, disposable)
     }
 
-    private fun getWidth(): Int {
-        val dm = applicationContext.resources.displayMetrics
-        return dm.widthPixels
-    }
+
 }
