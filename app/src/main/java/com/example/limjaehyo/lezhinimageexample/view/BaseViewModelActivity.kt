@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import com.afollestad.materialdialogs.MaterialDialog
-import com.example.limjaehyo.lezhinimageexample.MainActivity
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 

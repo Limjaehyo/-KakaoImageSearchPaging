@@ -1,17 +1,37 @@
 package com.example.limjaehyo.lezhinimageexample.viewmodel
 
 import android.app.Application
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
+import android.arch.paging.LivePagedListBuilder
+import android.arch.paging.PagedList
 import android.util.Log
+import com.example.limjaehyo.lezhinimageexample.model.datasource.ImageQueryDataSource
+import com.example.limjaehyo.lezhinimageexample.model.datasource.ImageQueryDataSourceFactory
 import com.example.limjaehyo.lezhinimageexample.model.datasource.ImageQueryModel
+import com.example.limjaehyo.lezhinimageexample.model.datasource.NetworkState
 import com.example.limjaehyo.lezhinimageexample.repository.ImageQueryRepository
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
 
 class ImageQueryViewModel(application: Application, viewModelInterface: ImageQueryViewModelInterface) : BaseViewModel<ImageQueryModel, ImageQueryViewModel.ImageQueryViewModelInterface, String>(application, viewModelInterface) {
+    private val executor: Executor
+    var netWorkState: LiveData<NetworkState>? = null
+    var refreshState: LiveData<NetworkState>? = null
+    lateinit var userList: LiveData<PagedList<ImageQueryModel.Documents>>
+    lateinit var imageListDataSource :ImageQueryDataSourceFactory
+
+
+    init {
+        executor = Executors.newFixedThreadPool(5)
+    }
+
 
     override fun getSingle(): Single<ImageQueryModel> {
         return  null!!
@@ -20,6 +40,17 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
     override fun getSingle(args: String): Single<ImageQueryModel> {
 
         return ImageQueryRepository.instance.getResponse(args)
+    }
+
+    fun  getQueryImagesPa ( paging : String, sort : String){
+
+        imageListDataSource = ImageQueryDataSourceFactory(compositeDisposable, paging,sort)
+        netWorkState = Transformations.switchMap<ImageQueryDataSource,NetworkState>(imageListDataSource.sourceFactoryLiveData) {it.networkStateLiveData}
+        refreshState = Transformations.switchMap<ImageQueryDataSource,NetworkState>(imageListDataSource.sourceFactoryLiveData) {it.initialLoad}
+        viewModelInterface.getqueryImages(LivePagedListBuilder(imageListDataSource,20)
+                .setFetchExecutor(executor)
+                .build())
+
     }
 
     fun getQueryImages(query: String) {
@@ -39,6 +70,9 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
         )
 
     }
+     fun retry() {
+        imageListDataSource.sourceFactoryLiveData.value!!.retry()
+    }
 
 
     class ImageQueryViewModelFactory(private val mApplication: Application, private val viewModelInterface: ImageQueryViewModelInterface) : ViewModelProvider.NewInstanceFactory() {
@@ -54,6 +88,6 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
     }
 
     interface ImageQueryViewModelInterface : BaseVewModelInterface {
-
+        fun getqueryImages(items : LiveData<PagedList<ImageQueryModel.Documents>>)
     }
 }
