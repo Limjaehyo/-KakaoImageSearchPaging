@@ -4,6 +4,8 @@ import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.TextView
 import com.example.limjaehyo.lezhinimageexample.R
 import com.example.limjaehyo.lezhinimageexample.model.datasource.ImageQueryModel
 import com.facebook.drawee.backends.pipeline.Fresco
@@ -26,6 +28,11 @@ class ImageDetailActivity : AppCompatActivity() {
         layoutParams.width = getWidth()
         layoutParams.height = height
         simpleDraweeView.layoutParams = layoutParams
+
+
+        simpleDraweeView.setOnClickListener { view: View? ->  }
+        findViewById<TextView>(R.id.tv_departure).text = "출처 : ${parcelable.display_sitename}"
+        findViewById<TextView>(R.id.tv_doc_url).text = "문서 URl : ${parcelable.doc_url}"
     }
     private fun getWidth(): Int {
         val dm = applicationContext.resources.displayMetrics

@@ -24,11 +24,12 @@
 
         <EditText
             android:id="@+id/et_query"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/et_query_hint"
             android:imeOptions="actionSearch"
             android:inputType="text"
+            android:paddingStart="@dimen/detail_view_text_top"
             app:layout_constraintEnd_toEndOf="@+id/end_guideline"
             app:layout_constraintStart_toStartOf="@+id/start_guideline" />
 
@@ -36,23 +37,27 @@
             android:id="@+id/rv_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="8dp"
             android:background="#ffffff"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_query" />
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/sr_layout"
+        <TextView
+            android:id="@+id/tv_msg"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="#aa000000"
             android:visibility="gone"
+            android:gravity="center"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_query">
+            app:layout_constraintTop_toBottomOf="@+id/et_query" />
 
 
-        </android.support.v4.widget.SwipeRefreshLayout>
     </android.support.constraint.ConstraintLayout>
 </layout>

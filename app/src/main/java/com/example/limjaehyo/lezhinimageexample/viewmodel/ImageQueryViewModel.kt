@@ -13,6 +13,7 @@ import com.example.limjaehyo.lezhinimageexample.model.datasource.ImageQueryModel
 import com.example.limjaehyo.lezhinimageexample.model.datasource.NetworkState
 import com.example.limjaehyo.lezhinimageexample.repository.ImageQueryRepository
 import io.reactivex.Single
+import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -21,12 +22,14 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
     private val executor: Executor
     var netWorkState: LiveData<NetworkState>? = null
     var refreshState: LiveData<NetworkState>? = null
+    var dataState: LiveData<Boolean>? = null
     lateinit var userList: LiveData<PagedList<ImageQueryModel.Documents>>
     lateinit var imageListDataSource: ImageQueryDataSourceFactory
-
+    var dataLayoutSubject: PublishSubject<Boolean>
 
     init {
         executor = Executors.newFixedThreadPool(5)
+        dataLayoutSubject = PublishSubject.create()
     }
 
 
@@ -44,6 +47,7 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
         imageListDataSource = ImageQueryDataSourceFactory(compositeDisposable, paging, sort)
         netWorkState = Transformations.switchMap<ImageQueryDataSource, NetworkState>(imageListDataSource.sourceFactoryLiveData) { it.networkStateLiveData }
         refreshState = Transformations.switchMap<ImageQueryDataSource, NetworkState>(imageListDataSource.sourceFactoryLiveData) { it.initialLoad }
+        dataState = Transformations.switchMap<ImageQueryDataSource, Boolean>(imageListDataSource.sourceFactoryLiveData) { it.isData }
         userList = LivePagedListBuilder(imageListDataSource, 20)
                 .setFetchExecutor(executor)
                 .build()

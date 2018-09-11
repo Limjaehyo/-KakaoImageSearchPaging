@@ -11,11 +11,13 @@ import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
 
 
-class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable, private val query: String,private  val sort : String)
+class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable, private val query: String, private val sort: String)
     : PageKeyedDataSource<Int, ImageQueryModel.Documents>() {
 
-     var networkStateLiveData: MutableLiveData<NetworkState> = MutableLiveData()
+    var networkStateLiveData: MutableLiveData<NetworkState> = MutableLiveData()
     val initialLoad = MutableLiveData<NetworkState>()
+    val isData = MutableLiveData<Boolean>()
+
     private var retryCompletable: Completable? = null
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, ImageQueryModel.Documents>) {
@@ -27,10 +29,11 @@ class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable,
                     setRetry(null)
                     initialLoad.postValue(NetworkState.LOADED)
                     networkStateLiveData.postValue(NetworkState.LOADED)
+                    isData.postValue(imageQueryList.documents.isEmpty())
                     callback.onResult(imageQueryList.documents, null, 2)
 
                 }) { throwable ->
-                    Log.e("loadInitial",throwable.message);
+                    Log.e("loadInitial", throwable.message);
                     setRetry(Action { loadInitial(params, callback) })
                     networkStateLiveData.postValue(NetworkState.error(throwable.message))
                     initialLoad.postValue(NetworkState.error(throwable.message))
@@ -44,12 +47,12 @@ class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable,
                 .subscribe({ imageQueryList ->
                     networkStateLiveData.postValue(NetworkState.LOADED)
                     setRetry(null)
-                        val nextKey = (if (imageQueryList.meta.is_end) null else params.key + 1)
+                    val nextKey = (if (imageQueryList.meta.is_end) null else params.key + 1)
                     callback.onResult(imageQueryList.documents, nextKey)
 
 
                 }, { throwable ->
-                    Log.e("loadAfter",throwable.message);
+                    Log.e("loadAfter", throwable.message);
                     setRetry(Action { loadAfter(params, callback) })
                     networkStateLiveData.postValue(NetworkState.error(throwable.message))
                 }))
@@ -73,7 +76,7 @@ class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable,
             compositeDisposable.add(retryCompletable!!
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ }, { throwable -> Log.e("retry",throwable.message) }))
+                    .subscribe({ }, { throwable -> Log.e("retry", throwable.message) }))
         }
     }
 }

@@ -1,16 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     tools:context=".view.ImageDetailActivity">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/my_image_view"
-        android:layout_width="@dimen/drawee_view_width"
-        android:layout_height="@dimen/drawee_view_width"
-        fresco:actualImageScaleType="focusCrop" />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.constraint.Guideline
+                android:id="@+id/start_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                fresco:layout_constraintGuide_begin="16dp" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/end_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                fresco:layout_constraintGuide_end="16dp" />
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/my_image_view"
+                android:layout_width="@dimen/drawee_view_width"
+                android:layout_height="@dimen/drawee_view_width"
+                fresco:actualImageScaleType="focusCrop" />
+
+
+            <TextView
+                android:id="@+id/tv_departure"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/detail_view_text_top"
+                android:textColor="@android:color/black"
+                fresco:layout_constraintEnd_toEndOf="@+id/end_guideline"
+                fresco:layout_constraintStart_toStartOf="@+id/start_guideline"
+                fresco:layout_constraintTop_toBottomOf="@+id/my_image_view" />
+
+            <TextView
+                android:id="@+id/tv_doc_url"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@android:color/black"
+                fresco:layout_constraintEnd_toEndOf="@+id/end_guideline"
+                fresco:layout_constraintStart_toStartOf="@+id/start_guideline"
+                fresco:layout_constraintTop_toBottomOf="@+id/tv_departure" />
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
 
 </android.support.constraint.ConstraintLayout>
