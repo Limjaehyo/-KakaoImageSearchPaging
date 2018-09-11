@@ -7,8 +7,9 @@
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/my_image_view"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="@dimen/drawee_view_width"
+        android:layout_height="wrap_content"
+        fresco:viewAspectRatio="1.33f"
         fresco:actualImageScaleType="focusCrop" />
 
     <android.support.v4.widget.ContentLoadingProgressBar
