@@ -31,22 +31,27 @@
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="@+id/end_guideline"
             app:layout_constraintStart_toStartOf="@+id/start_guideline" />
-
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_list"
+            android:background="#ffffff"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_query"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/sr_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_query">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#ffffff"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
         </android.support.v4.widget.SwipeRefreshLayout>
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -75,7 +75,7 @@ class ImageAdapter(private val retryCallback: () -> Unit) : PagedListAdapter<Ima
     companion object {
         val ImageDiffCallback = object : DiffUtil.ItemCallback<ImageQueryModel.Documents>() {
             override fun areItemsTheSame(oldItem: ImageQueryModel.Documents, newItem: ImageQueryModel.Documents): Boolean {
-                return oldItem == newItem
+                return oldItem.datetime == newItem.datetime
             }
 
             override fun areContentsTheSame(oldItem: ImageQueryModel.Documents, newItem: ImageQueryModel.Documents): Boolean {
