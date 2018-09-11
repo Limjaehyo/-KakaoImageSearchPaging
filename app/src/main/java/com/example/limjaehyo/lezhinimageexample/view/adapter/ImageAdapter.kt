@@ -24,7 +24,7 @@ import com.facebook.imagepipeline.image.ImageInfo
 import kotlinx.android.synthetic.main.item_network_state.view.*
 
 
-class ImageAdapter(val context :Context, var deviceWidth : Int ,private val retryCallback: () -> Unit) : PagedListAdapter<ImageQueryModel.Documents,RecyclerView.ViewHolder>(ImageDiffCallback){
+class ImageAdapter(private val context :Context, var deviceWidth : Int, private val retryCallback: () -> Unit) : PagedListAdapter<ImageQueryModel.Documents,RecyclerView.ViewHolder>(ImageDiffCallback){
     private var networkState: NetworkState? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -80,9 +80,6 @@ class ImageAdapter(val context :Context, var deviceWidth : Int ,private val retr
     fun setDataReset(){
         if (currentList != null) {
             currentList?.dataSource?.invalidate()
-            for (item in currentList!!){
-                currentList?.remove(item)
-            }
 
         }
     }

@@ -30,6 +30,7 @@ class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable,
                     callback.onResult(imageQueryList.documents, null, 2)
 
                 }) { throwable ->
+                    Log.e("loadInitial",throwable.message);
                     setRetry(Action { loadInitial(params, callback) })
                     networkStateLiveData.postValue(NetworkState.error(throwable.message))
                     initialLoad.postValue(NetworkState.error(throwable.message))
@@ -48,6 +49,7 @@ class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable,
 
 
                 }, { throwable ->
+                    Log.e("loadAfter",throwable.message);
                     setRetry(Action { loadAfter(params, callback) })
                     networkStateLiveData.postValue(NetworkState.error(throwable.message))
                 }))
