@@ -26,7 +26,7 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
 
 
     init {
-        executor = Executors.newFixedThreadPool(4)
+        executor = Executors.newFixedThreadPool(5)
     }
 
 
@@ -47,7 +47,10 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
         userList = LivePagedListBuilder(imageListDataSource, 20)
                 .setFetchExecutor(executor)
                 .build()
+
+
         viewModelInterface.getQueryImages(userList)
+
 
     }
 

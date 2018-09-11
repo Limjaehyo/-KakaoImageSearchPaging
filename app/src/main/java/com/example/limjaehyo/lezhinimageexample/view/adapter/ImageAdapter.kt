@@ -1,12 +1,14 @@
 package com.example.limjaehyo.lezhinimageexample.view.adapter
 
 import android.arch.paging.PagedListAdapter
+import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.net.Uri
+import android.os.Bundle
 import android.support.v4.widget.ContentLoadingProgressBar
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,7 @@ import com.example.limjaehyo.lezhinimageexample.R
 import com.example.limjaehyo.lezhinimageexample.model.datasource.ImageQueryModel
 import com.example.limjaehyo.lezhinimageexample.model.datasource.NetworkState
 import com.example.limjaehyo.lezhinimageexample.model.datasource.Status
+import com.example.limjaehyo.lezhinimageexample.view.ImageDetailActivity
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.controller.BaseControllerListener
 import com.facebook.drawee.view.SimpleDraweeView
@@ -21,7 +24,7 @@ import com.facebook.imagepipeline.image.ImageInfo
 import kotlinx.android.synthetic.main.item_network_state.view.*
 
 
-class ImageAdapter(private val retryCallback: () -> Unit) : PagedListAdapter<ImageQueryModel.Documents,RecyclerView.ViewHolder>(ImageDiffCallback){
+class ImageAdapter(val context :Context, var deviceWidth : Int ,private val retryCallback: () -> Unit) : PagedListAdapter<ImageQueryModel.Documents,RecyclerView.ViewHolder>(ImageDiffCallback){
     private var networkState: NetworkState? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -34,7 +37,7 @@ class ImageAdapter(private val retryCallback: () -> Unit) : PagedListAdapter<Ima
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            R.layout.item_image -> (holder as ImageItemViewHolder).bindTo(getItem(position))
+            R.layout.item_image -> (holder as ImageItemViewHolder).bindTo(context,getItem(position),deviceWidth)
             R.layout.item_network_state -> (holder as NetworkStateViewHolder).bindTo(networkState)
         }
     }
@@ -72,6 +75,15 @@ class ImageAdapter(private val retryCallback: () -> Unit) : PagedListAdapter<Ima
                     notifyItemChanged(itemCount - 1)
                 }
             }
+        }
+    }
+    fun setDataReset(){
+        if (currentList != null) {
+            currentList?.dataSource?.invalidate()
+            for (item in currentList!!){
+                currentList?.remove(item)
+            }
+
         }
     }
 
@@ -116,23 +128,32 @@ class ImageAdapter(private val retryCallback: () -> Unit) : PagedListAdapter<Ima
 
     class ImageItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bindTo(imageDoc: ImageQueryModel.Documents?) {
-            val uri = Uri.parse(imageDoc?.thumbnail_url)
-//            Log.e("aa","${imageDoc?.thumbnail_url}")
+        fun bindTo(context: Context ,imageDoc: ImageQueryModel.Documents?, deviceWidth : Int) {
             val simpleDraweeView = itemView.findViewById(R.id.my_image_view) as SimpleDraweeView
             val controllerBuilder = Fresco.newDraweeControllerBuilder()
             controllerBuilder.setUri(imageDoc?.thumbnail_url)
             controllerBuilder.oldController = simpleDraweeView.controller
-            /*val height = (bitmap.getHeight().toFloat() * HotelNJoyApplication.getInstance().getResources().getDisplayMetrics().widthPixels as Float / bitmap.getWidth().toFloat()).toInt()*/
+            val height = (imageDoc?.height?.toFloat()!! * deviceWidth.toFloat() / imageDoc.width.toFloat()).toInt()
+                    val layoutParams = simpleDraweeView.layoutParams
+                    layoutParams.width = deviceWidth /2
+                    layoutParams.height = height /2
+                    simpleDraweeView.layoutParams = layoutParams
             controllerBuilder.controllerListener = object : BaseControllerListener<ImageInfo>() {
                 override fun onFinalImageSet(id: String?, imageInfo: ImageInfo?, animatable: Animatable?) {
                     super.onFinalImageSet(id, imageInfo, animatable)
+                    if (imageInfo == null) {
+                        return
+                    }
                     val progressBar = itemView.findViewById(R.id.progress_view) as ContentLoadingProgressBar
                     progressBar.visibility = View.GONE
-
                 }
             }
             simpleDraweeView.controller = controllerBuilder.build()
+            val intent = Intent(context, ImageDetailActivity::class.java)
+            val bundle = Bundle()
+            bundle.putParcelable("item",imageDoc)
+            intent.putExtra("bundle",bundle)
+            simpleDraweeView.setOnClickListener { view: View? -> context.startActivity(intent) }
 
         }
 
@@ -145,4 +166,6 @@ class ImageAdapter(private val retryCallback: () -> Unit) : PagedListAdapter<Ima
         }
 
     }
+
+
 }

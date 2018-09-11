@@ -17,7 +17,9 @@ android {
     dataBinding {
         enabled = true
     }
-
+    androidExtensions {
+        experimental = true
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -56,5 +58,3 @@ dependencies {
     kapt "com.android.databinding:compiler:3.1.4"
 
 }
-
-
