@@ -123,6 +123,7 @@ class ImageAdapter(private val retryCallback: () -> Unit) : PagedListAdapter<Ima
             val controllerBuilder = Fresco.newDraweeControllerBuilder()
             controllerBuilder.setUri(imageDoc?.thumbnail_url)
             controllerBuilder.oldController = simpleDraweeView.controller
+            /*val height = (bitmap.getHeight().toFloat() * HotelNJoyApplication.getInstance().getResources().getDisplayMetrics().widthPixels as Float / bitmap.getWidth().toFloat()).toInt()*/
             controllerBuilder.controllerListener = object : BaseControllerListener<ImageInfo>() {
                 override fun onFinalImageSet(id: String?, imageInfo: ImageInfo?, animatable: Animatable?) {
                     super.onFinalImageSet(id, imageInfo, animatable)
