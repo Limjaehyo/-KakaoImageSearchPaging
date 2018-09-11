@@ -6,30 +6,43 @@ class ImageQueryModel(@SerializedName("meta") var meta: Meta, @SerializedName("d
 
 
     class Meta {
+        //검색어에 검색된 문서수
         @SerializedName("total_count")
         var total_count: Int = 0
+
+        //노출가능 문서수
         @SerializedName("pageable_count")
         var pageable_count: Int = 0
+
+        //다음페이지 여부
         @SerializedName("is_end")
         var is_end: Boolean = false
 
     }
 
     class Documents {
+        //컬렉션
         @SerializedName("collection")
         var collection: String = ""
-        @SerializedName("thumbnail_url")
+        //섬네일 이미
+       @SerializedName("thumbnail_url")
         var thumbnail_url: String = ""
         @SerializedName("image_url")
+        //	이미지 URL
         var image_url: String = ""
+        //	이미지 가로크기
         @SerializedName("width")
         var width: String = ""
+        //	이미지 세로크기
         @SerializedName("height")
         var height: String = ""
+        //출처
         @SerializedName("display_sitename")
         var display_sitename: String = ""
+        //	문서 URL
         @SerializedName("doc_url")
         var doc_url: String = ""
+        //문서 작성시간. ISO 8601. [YYYY]-[MM]-[DD]T[hh]:[mm]:[ss].000+[tz]
         @SerializedName("datetime")
         var datetime: String = ""
 
