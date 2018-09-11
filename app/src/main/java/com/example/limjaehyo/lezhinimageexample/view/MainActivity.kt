@@ -6,11 +6,13 @@ import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.PagedList
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.util.Log
 import com.example.limjaehyo.lezhinimageexample.R
 import com.example.limjaehyo.lezhinimageexample.databinding.ActivityMain2Binding
 import com.example.limjaehyo.lezhinimageexample.model.datasource.ImageQueryModel
-import com.example.limjaehyo.lezhinimageexample.view.adapter.IamgeAdpter
+import com.example.limjaehyo.lezhinimageexample.view.adapter.ImageAdapter
 import com.example.limjaehyo.lezhinimageexample.viewmodel.ImageQueryViewModel
+import com.facebook.drawee.backends.pipeline.Fresco
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -19,7 +21,7 @@ import java.util.concurrent.TimeUnit
 class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryViewModel.ImageQueryViewModelInterface {
 
 
-    private lateinit var adapter: IamgeAdpter
+    private lateinit var adapter: ImageAdapter
     lateinit var mViewBinding: ActivityMain2Binding
 
     override fun viewModel(): ImageQueryViewModel {
@@ -31,29 +33,37 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mViewBinding = DataBindingUtil.setContentView(this, R.layout.activity_main2)
-
+        Fresco.initialize(this)
+        adapter = ImageAdapter {
+            mViewModel?.retry()
+        }
+        mViewBinding.rvList.adapter = adapter
 
         getDisposable().add(RxTextView.textChanges(mViewBinding.etQuery)
                 .observeOn(AndroidSchedulers.mainThread())
                 .throttleLast(1, TimeUnit.SECONDS)
+                .filter { t: CharSequence -> t.isNotEmpty() }
                 .subscribe(
                         { text ->
-                            mViewModel?.getQueryImages(text.toString())
+
+                            mViewModel?.getQueryImagesPaging(text.toString(), "recency")
                         }
                 ) { _ -> run {} })
 
 //        mViewModel?.getQueryImages("소연")
 
-        mViewBinding.rvList.adapter = IamgeAdpter {
-            mViewModel?.retry()
-        }
 
     }
 
     override fun getqueryImages(items: LiveData<PagedList<ImageQueryModel.Documents>>) {
+        if (::adapter.isInitialized) {
+            mViewModel?.netWorkState?.observe(this, Observer { adapter.setNetworkState(it) })
 
-        mViewModel?.netWorkState?.observe(this, Observer { adapter.setNetworkState(it) })
-        items.observe(this, Observer { adapter.submitList(it) })
+            items.observe(this, Observer { adapter.submitList(it) })
+        } else {
+            Log.e("adapter", "no Init")
+
+        }
     }
 
     override fun showMessageDialog(msg: String) {

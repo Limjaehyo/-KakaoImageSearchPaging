@@ -1,8 +1,10 @@
 package com.example.limjaehyo.lezhinimageexample.view.adapter
 
 import android.arch.paging.PagedListAdapter
+import android.net.Uri
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +13,12 @@ import com.example.limjaehyo.lezhinimageexample.model.datasource.ImageQueryModel
 import com.example.limjaehyo.lezhinimageexample.model.datasource.NetworkState
 import com.example.limjaehyo.lezhinimageexample.model.datasource.Status
 import kotlinx.android.synthetic.main.item_network_state.view.*
+import com.facebook.drawee.view.SimpleDraweeView
 
 
-class IamgeAdpter(private val retryCallback: () -> Unit) : PagedListAdapter<ImageQueryModel.Documents,RecyclerView.ViewHolder>(ImageDiffCallback){
+
+
+class ImageAdapter(private val retryCallback: () -> Unit) : PagedListAdapter<ImageQueryModel.Documents,RecyclerView.ViewHolder>(ImageDiffCallback){
     private var networkState: NetworkState? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -108,13 +113,11 @@ class IamgeAdpter(private val retryCallback: () -> Unit) : PagedListAdapter<Imag
 
     class ImageItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bindTo(user: ImageQueryModel.Documents?) {
-         /*   itemView.UserName.text = user?.login
-            GlideApp.with(itemView.context)
-                    .load(user?.avatarUrl)
-                    .placeholder(R.mipmap.ic_launcher)
-                    .into(itemView.UserAvatar)
-            itemView.siteAdminIcon.visibility = if (user!!.siteAdmin) View.VISIBLE else View.GONE*/
+        fun bindTo(imageDoc: ImageQueryModel.Documents?) {
+            val uri = Uri.parse(imageDoc?.thumbnail_url)
+            Log.e("aa","${imageDoc?.thumbnail_url}")
+            val simpleDraweeView = itemView.findViewById(R.id.my_image_view) as SimpleDraweeView
+            simpleDraweeView.setImageURI(uri)
         }
 
         companion object {

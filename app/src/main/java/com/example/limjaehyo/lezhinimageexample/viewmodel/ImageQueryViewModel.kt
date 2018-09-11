@@ -25,7 +25,7 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
     var netWorkState: LiveData<NetworkState>? = null
     var refreshState: LiveData<NetworkState>? = null
     lateinit var userList: LiveData<PagedList<ImageQueryModel.Documents>>
-    lateinit var imageListDataSource :ImageQueryDataSourceFactory
+    lateinit var imageListDataSource: ImageQueryDataSourceFactory
 
 
     init {
@@ -34,7 +34,7 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
 
 
     override fun getSingle(): Single<ImageQueryModel> {
-        return  null!!
+        return null!!
     }
 
     override fun getSingle(args: String): Single<ImageQueryModel> {
@@ -42,14 +42,15 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
         return ImageQueryRepository.instance.getResponse(args)
     }
 
-    fun  getQueryImagesPa ( paging : String, sort : String){
+    fun getQueryImagesPaging(paging: String, sort: String) {
 
-        imageListDataSource = ImageQueryDataSourceFactory(compositeDisposable, paging,sort)
-        netWorkState = Transformations.switchMap<ImageQueryDataSource,NetworkState>(imageListDataSource.sourceFactoryLiveData) {it.networkStateLiveData}
-        refreshState = Transformations.switchMap<ImageQueryDataSource,NetworkState>(imageListDataSource.sourceFactoryLiveData) {it.initialLoad}
-        viewModelInterface.getqueryImages(LivePagedListBuilder(imageListDataSource,20)
+        imageListDataSource = ImageQueryDataSourceFactory(compositeDisposable, paging, sort)
+        netWorkState = Transformations.switchMap<ImageQueryDataSource, NetworkState>(imageListDataSource.sourceFactoryLiveData) { it.networkStateLiveData }
+        refreshState = Transformations.switchMap<ImageQueryDataSource, NetworkState>(imageListDataSource.sourceFactoryLiveData) { it.initialLoad }
+        userList = LivePagedListBuilder(imageListDataSource, 20)
                 .setFetchExecutor(executor)
-                .build())
+                .build()
+        viewModelInterface.getqueryImages(userList)
 
     }
 
@@ -62,15 +63,16 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
                             run {
                                 Log.e("dd", item.documents[0].image_url)
                             }
-                        }, {
-                            throwable : Throwable-> run {
-                            throwable.message?.let { viewModelInterface.showMessageDialog(it) }
-                        }
+                        }, { throwable: Throwable ->
+                            run {
+                                throwable.message?.let { viewModelInterface.showMessageDialog(it) }
+                            }
                         })
         )
 
     }
-     fun retry() {
+
+    fun retry() {
         imageListDataSource.sourceFactoryLiveData.value!!.retry()
     }
 
@@ -88,6 +90,6 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
     }
 
     interface ImageQueryViewModelInterface : BaseVewModelInterface {
-        fun getqueryImages(items : LiveData<PagedList<ImageQueryModel.Documents>>)
+        fun getqueryImages(items: LiveData<PagedList<ImageQueryModel.Documents>>)
     }
 }
