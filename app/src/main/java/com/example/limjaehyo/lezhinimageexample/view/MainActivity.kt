@@ -19,6 +19,8 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -51,12 +53,10 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                     }
                 }
         RxTextView.textChanges(et_query)
-                .throttleLast(2, TimeUnit.SECONDS)
+                .throttleLast(1, TimeUnit.SECONDS,AndroidSchedulers.mainThread())
                 .subscribe(
                         { text ->
-                            Log.e("text", text.toString())
-
-                            if (text.isNotEmpty()) {
+                           if (text.isNotEmpty()) {
                                 removeDisposable("list")
                                 mViewModel?.getQueryImagesPaging(text.toString(), "recency")
                                 mViewModel?.dataLayoutSubject?.onNext(false)
