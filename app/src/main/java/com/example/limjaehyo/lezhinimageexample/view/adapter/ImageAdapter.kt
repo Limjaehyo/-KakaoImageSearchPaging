@@ -99,13 +99,11 @@ class ImageAdapter(private val context: Context,private val retryCallback: () ->
         }
 
         fun bindTo(networkState: NetworkState?) {
-            //error message
             itemView.errorMessageTextView.visibility = if (networkState?.message != null) View.VISIBLE else View.GONE
             if (networkState?.message != null) {
                 itemView.errorMessageTextView.text = networkState.message
             }
 
-            //loading and retry
             itemView.retryLoadingButton.visibility = if (networkState?.status == Status.FAILED) View.VISIBLE else View.GONE
             itemView.loadingProgressBar.visibility = if (networkState?.status == Status.RUNNING) View.VISIBLE else View.GONE
         }
