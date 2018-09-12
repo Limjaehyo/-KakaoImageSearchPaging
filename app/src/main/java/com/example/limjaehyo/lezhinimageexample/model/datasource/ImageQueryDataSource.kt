@@ -9,6 +9,7 @@ import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Action
+import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 
 
@@ -34,9 +35,14 @@ class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable,
                     callback.onResult(imageQueryList.documents, null, 2)
 
                 }) { throwable ->
-                    viewModelInterface.showMessageDialog(throwable?.message?:"")
+
                     setRetry(Action { loadInitial(params, callback) })
                     networkStateLiveData.postValue(NetworkState.error(throwable.message))
+                /*    compositeDisposable.add(Completable.create { emitter -> emitter.onComplete() }
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({
+                        viewModelInterface.showMessageDialog(throwable?.message?:"")
+                    }, { Log.e("Completable",throwable?.message) }))*/
                     initialLoad.postValue(NetworkState.error(throwable.message))
                 })
     }

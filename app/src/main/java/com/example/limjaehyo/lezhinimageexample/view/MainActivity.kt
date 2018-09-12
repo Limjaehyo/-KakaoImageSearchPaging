@@ -4,16 +4,11 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.PagedList
-import android.content.Context
-import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import com.example.limjaehyo.lezhinimageexample.R
-import com.example.limjaehyo.lezhinimageexample.databinding.ActivityMainBinding
 import com.example.limjaehyo.lezhinimageexample.model.datasource.ImageQueryModel
 import com.example.limjaehyo.lezhinimageexample.model.datasource.Status
 import com.example.limjaehyo.lezhinimageexample.view.adapter.GridSpacingItemDecoration
@@ -21,13 +16,9 @@ import com.example.limjaehyo.lezhinimageexample.view.adapter.ImageAdapter
 import com.example.limjaehyo.lezhinimageexample.viewmodel.ImageQueryViewModel
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.jakewharton.rxbinding2.widget.RxTextView
-import io.reactivex.Completable
-import io.reactivex.CompletableEmitter
-import io.reactivex.CompletableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Action
-import io.reactivex.functions.Consumer
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 
 
@@ -35,8 +26,6 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
 
 
     private lateinit var adapter: ImageAdapter
-    private lateinit var mViewBinding: ActivityMainBinding
-    private lateinit var imm: InputMethodManager
 
     override fun viewModel(): ImageQueryViewModel {
         val factory = ImageQueryViewModel.ImageQueryViewModelFactory(application, this)
@@ -46,31 +35,29 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mViewBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setContentView(R.layout.activity_main)
         Fresco.initialize(this)
-        imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        setMessageTextSetting("검색어를 입력해주세요")
         adapterInit()
 
         mViewModel?.dataLayoutSubject?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe { visibility ->
                     if (visibility) {
-                        mViewBinding.tvMsg.visibility = View.VISIBLE
-                        mViewBinding.rvList.visibility = View.GONE
+                        tv_msg.visibility = View.VISIBLE
+                        rv_list.visibility = View.GONE
                     } else {
-                        mViewBinding.tvMsg.visibility = View.GONE
-                        mViewBinding.rvList.visibility = View.VISIBLE
+                        tv_msg.visibility = View.GONE
+                        rv_list.visibility = View.VISIBLE
                     }
                 }
-        getDisposable().add(RxTextView.textChanges(mViewBinding.etQuery)
-                .throttleLast(1, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
+        RxTextView.textChanges(et_query)
+                .throttleLast(2, TimeUnit.SECONDS)
                 .subscribe(
                         { text ->
-                            Log.e("text",text.toString())
-                            if (text.isNotEmpty()) {
+                            Log.e("text", text.toString())
 
+                            if (text.isNotEmpty()) {
                                 removeDisposable("list")
-                                mViewModel?.dataLayoutSubject?.onNext(mViewBinding.tvMsg.visibility != View.VISIBLE)
                                 mViewModel?.getQueryImagesPaging(text.toString(), "recency")
                                 mViewModel?.dataLayoutSubject?.onNext(false)
                             } else {
@@ -78,32 +65,26 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                                 mViewModel?.dataLayoutSubject?.onNext(true)
                             }
                         }
-                ) { th -> run { Log.e("textChanges", th.message) } })
+                ) { th -> run { Log.e("textChanges", th.message) } }
 
-        mViewModel?.keybordSubject?.observeOn(AndroidSchedulers.mainThread())
-                ?.throttleLast(1,TimeUnit.SECONDS)
-                ?.subscribe { _ ->
-                    imm.hideSoftInputFromWindow(mViewBinding.etQuery.windowToken, 0)
-                }
 
     }
 
 
-
     private fun adapterInit() {
-        adapter = ImageAdapter(this,mViewModel?.keybordSubject!!) {
+        adapter = ImageAdapter(this) {
             mViewModel?.retry()
         }
         setStaggeredSetting()
 
-        mViewBinding.rvList.adapter = adapter
+        rv_list.adapter = adapter
     }
 
     private fun setStaggeredSetting() {
         val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, 1)
         staggeredGridLayoutManager.orientation = StaggeredGridLayoutManager.VERTICAL
-        mViewBinding.rvList.layoutManager = staggeredGridLayoutManager
-        mViewBinding.rvList.addItemDecoration(GridSpacingItemDecoration(2, 8, true))
+        rv_list.layoutManager = staggeredGridLayoutManager
+        rv_list.addItemDecoration(GridSpacingItemDecoration(2, 8, true))
     }
 
     override fun getQueryImages(items: LiveData<PagedList<ImageQueryModel.Documents>>) {
@@ -125,12 +106,6 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                     if (it == true) {
                         setMessageTextSetting("검색 결과가 없습니다.")
                         mViewModel?.dataLayoutSubject?.onNext(true)
-                    }else{
-                        /*putDisposableMap("keybord", Completable.create { emitter: CompletableEmitter -> emitter.onComplete() }
-                                .delay(1200,TimeUnit.MILLISECONDS)
-                                .subscribe({  imm.hideSoftInputFromWindow(mViewBinding.etQuery.windowToken, 0) }
-                                        , { t: Throwable -> Log.e("keybord",t.message)  }))*/
-
                     }
                 }
             })
@@ -148,7 +123,7 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
     }
 
     private fun setMessageTextSetting(msg: String) {
-        mViewBinding.tvMsg.text = msg
+        tv_msg.text = msg
     }
 
     override fun showMessageDialog(msg: String) {

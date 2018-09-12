@@ -50,7 +50,7 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
         refreshState = Transformations.switchMap<ImageQueryDataSource, NetworkState>(imageListDataSource.sourceFactoryLiveData) { it.initialLoad }
         dataState = Transformations.switchMap<ImageQueryDataSource, Boolean>(imageListDataSource.sourceFactoryLiveData) { it.isData }
         userList = LivePagedListBuilder(imageListDataSource, 20)
-//                .setFetchExecutor(executor)
+                .setFetchExecutor(executor)
                 .build()
 
 

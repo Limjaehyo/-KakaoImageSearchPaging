@@ -1,6 +1,5 @@
 package com.example.limjaehyo.lezhinimageexample.view.adapter
 
-import android.arch.paging.PagedList
 import android.arch.paging.PagedListAdapter
 import android.content.Context
 import android.content.Intent
@@ -21,11 +20,10 @@ import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.controller.BaseControllerListener
 import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.image.ImageInfo
-import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.item_network_state.view.*
 
 
-class ImageAdapter(private val context: Context, var keybordSubject: PublishSubject<Boolean>, private val retryCallback: () -> Unit) : PagedListAdapter<ImageQueryModel.Documents, RecyclerView.ViewHolder>(ImageDiffCallback) {
+class ImageAdapter(private val context: Context,private val retryCallback: () -> Unit) : PagedListAdapter<ImageQueryModel.Documents, RecyclerView.ViewHolder>(ImageDiffCallback) {
     private var networkState: NetworkState? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -79,10 +77,7 @@ class ImageAdapter(private val context: Context, var keybordSubject: PublishSubj
         }
     }
 
-    override fun submitList(pagedList: PagedList<ImageQueryModel.Documents>?) {
-        super.submitList(pagedList)
-        keybordSubject.onNext(true)
-    }
+
 
     companion object {
         val ImageDiffCallback = object : DiffUtil.ItemCallback<ImageQueryModel.Documents>() {
