@@ -61,11 +61,6 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                         mViewBinding.rvList.visibility = View.VISIBLE
                     }
                 }
-
-    }
-
-    override fun onStart() {
-        super.onStart()
         getDisposable().add(RxTextView.textChanges(mViewBinding.etQuery)
                 .throttleLast(1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -84,7 +79,10 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                             }
                         }
                 ) { th -> run { Log.e("textChanges", th.message) } })
+
     }
+
+
 
     private fun adapterInit() {
         adapter = ImageAdapter(this) {
@@ -104,10 +102,6 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
 
     override fun getQueryImages(items: LiveData<PagedList<ImageQueryModel.Documents>>) {
         if (::adapter.isInitialized) {
-            putDisposableMap("keybord", Completable.create { emitter: CompletableEmitter -> emitter.onComplete() }
-                    .delay(2,TimeUnit.SECONDS)
-                    .subscribe({  imm.hideSoftInputFromWindow(mViewBinding.etQuery.windowToken, 0) }
-                            , { t: Throwable -> Log.e("keybord",t.message)  }))
 
             mViewModel?.netWorkState?.observe(this, Observer { it ->
                 run {
@@ -125,6 +119,12 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                     if (it == true) {
                         setMessageTextSetting("검색 결과가 없습니다.")
                         mViewModel?.dataLayoutSubject?.onNext(true)
+                    }else{
+                        putDisposableMap("keybord", Completable.create { emitter: CompletableEmitter -> emitter.onComplete() }
+                                .delay(1,TimeUnit.SECONDS)
+                                .subscribe({  imm.hideSoftInputFromWindow(mViewBinding.etQuery.windowToken, 0) }
+                                        , { t: Throwable -> Log.e("keybord",t.message)  }))
+
                     }
                 }
             })

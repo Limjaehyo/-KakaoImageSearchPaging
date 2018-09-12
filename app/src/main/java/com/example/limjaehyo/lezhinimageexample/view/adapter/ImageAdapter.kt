@@ -25,7 +25,7 @@ import com.facebook.imagepipeline.image.ImageInfo
 import kotlinx.android.synthetic.main.item_network_state.view.*
 
 
-class ImageAdapter(private val context :Context, private val retryCallback: () -> Unit) : PagedListAdapter<ImageQueryModel.Documents,RecyclerView.ViewHolder>(ImageDiffCallback){
+class ImageAdapter(private val context: Context, private val retryCallback: () -> Unit) : PagedListAdapter<ImageQueryModel.Documents, RecyclerView.ViewHolder>(ImageDiffCallback) {
     private var networkState: NetworkState? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -38,7 +38,7 @@ class ImageAdapter(private val context :Context, private val retryCallback: () -
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            R.layout.item_image -> (holder as ImageItemViewHolder).bindTo(context,getItem(position))
+            R.layout.item_image -> (holder as ImageItemViewHolder).bindTo(context, getItem(position))
             R.layout.item_network_state -> (holder as NetworkStateViewHolder).bindTo(networkState)
         }
     }
@@ -91,6 +91,7 @@ class ImageAdapter(private val context :Context, private val retryCallback: () -
             }
         }
     }
+
     class NetworkStateViewHolder(val view: View, private val retryCallback: () -> Unit) : RecyclerView.ViewHolder(view) {
 
         init {
@@ -121,17 +122,24 @@ class ImageAdapter(private val context :Context, private val retryCallback: () -
 
     class ImageItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bindTo(context: Context ,imageDoc: ImageQueryModel.Documents?) {
+        fun bindTo(context: Context, imageDoc: ImageQueryModel.Documents?) {
             val simpleDraweeView = itemView.findViewById(R.id.my_image_view) as SimpleDraweeView
             val controllerBuilder = Fresco.newDraweeControllerBuilder()
 
+
             controllerBuilder.setUri(imageDoc?.image_url)
             controllerBuilder.oldController = simpleDraweeView.controller
-            val ratioHeight = CommonUtil.getRatioHeight(context,imageDoc?.height?.toInt()?:0, imageDoc?.width?.toInt()?:0)
-                    val layoutParams = simpleDraweeView.layoutParams
-                    layoutParams.width = CommonUtil.getWidth(context)
-                    layoutParams.height = ratioHeight /2
-                    simpleDraweeView.layoutParams = layoutParams
+            val ratioHeight = CommonUtil.getRatioHeight(context, imageDoc?.height?.toInt()
+                    ?: 0, imageDoc?.width?.toInt() ?: 0)
+            val draweeViewLayoutParams = simpleDraweeView.layoutParams
+            val progressBarView = itemView.findViewById<ContentLoadingProgressBar>(R.id.progress_view)
+            val progressLayoutParams = progressBarView.layoutParams
+            draweeViewLayoutParams.width = CommonUtil.getWidth(context)
+            progressLayoutParams.width = CommonUtil.getWidth(context)
+            draweeViewLayoutParams.height = ratioHeight / 2
+            progressLayoutParams.height = ratioHeight / 2
+            simpleDraweeView.layoutParams = draweeViewLayoutParams
+            progressBarView.layoutParams = progressLayoutParams
 
             controllerBuilder.controllerListener = object : BaseControllerListener<ImageInfo>() {
                 override fun onFinalImageSet(id: String?, imageInfo: ImageInfo?, animatable: Animatable?) {
@@ -139,14 +147,13 @@ class ImageAdapter(private val context :Context, private val retryCallback: () -
                     if (imageInfo == null) {
                         return
                     }
-                    val progressBar = itemView.findViewById(R.id.progress_view) as ContentLoadingProgressBar
-                    progressBar.visibility = View.GONE
+                    progressBarView.visibility = View.GONE
                 }
             }
             simpleDraweeView.controller = controllerBuilder.build()
 
             val intent = Intent(context, ImageDetailActivity::class.java)
-            intent.putExtra("item",imageDoc)
+            intent.putExtra("item", imageDoc)
             simpleDraweeView.setOnClickListener { _: View? -> context.startActivity(intent) }
 
         }
