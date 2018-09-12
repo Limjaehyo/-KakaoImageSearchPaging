@@ -9,18 +9,17 @@
         android:id="@+id/my_image_view"
         android:layout_width="@dimen/drawee_view_width"
         android:layout_height="@dimen/drawee_view_width"
-        fresco:actualImageScaleType="focusCrop" />
+        fresco:actualImageScaleType="centerCrop" />
 
     <android.support.v4.widget.ContentLoadingProgressBar
         android:id="@+id/progress_view"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:visibility="visible"
         fresco:layout_constraintBottom_toBottomOf="@+id/my_image_view"
-        fresco:layout_constraintEnd_toEndOf="@+id/my_image_view"
-        fresco:layout_constraintStart_toStartOf="@+id/my_image_view"
+        fresco:layout_constraintEnd_toEndOf="parent"
+        fresco:layout_constraintStart_toStartOf="parent"
         fresco:layout_constraintTop_toTopOf="@+id/my_image_view" />
 
 

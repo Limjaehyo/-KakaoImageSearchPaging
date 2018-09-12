@@ -4,8 +4,6 @@ import android.arch.paging.PagedListAdapter
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
-import android.net.Uri
-import android.os.Bundle
 import android.support.v4.widget.ContentLoadingProgressBar
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -133,13 +131,9 @@ class ImageAdapter(private val context: Context, private val retryCallback: () -
                     ?: 0, imageDoc?.width?.toInt() ?: 0)
             val draweeViewLayoutParams = simpleDraweeView.layoutParams
             val progressBarView = itemView.findViewById<ContentLoadingProgressBar>(R.id.progress_view)
-            val progressLayoutParams = progressBarView.layoutParams
             draweeViewLayoutParams.width = CommonUtil.getWidth(context)
-            progressLayoutParams.width = CommonUtil.getWidth(context)
             draweeViewLayoutParams.height = ratioHeight / 2
-            progressLayoutParams.height = ratioHeight / 2
             simpleDraweeView.layoutParams = draweeViewLayoutParams
-            progressBarView.layoutParams = progressLayoutParams
 
             controllerBuilder.controllerListener = object : BaseControllerListener<ImageInfo>() {
                 override fun onFinalImageSet(id: String?, imageInfo: ImageInfo?, animatable: Animatable?) {
