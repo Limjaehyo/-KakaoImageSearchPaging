@@ -55,7 +55,7 @@ abstract class BaseViewModelActivity<T : ViewModel> : AppCompatActivity() {
 
     }
 
-
+    //key value 관리 map
     protected open fun putDisposableMap(tag: String, disposable: Disposable) {
         observer.putDisposableMap(tag, disposable)
 
@@ -74,6 +74,7 @@ abstract class BaseViewModelActivity<T : ViewModel> : AppCompatActivity() {
     fun getDisposable(): CompositeDisposable {
         return observer.getDisposable()
     }
+
     fun getNetWorkDisposable(): CompositeDisposable {
         return observer.getNetWorkDisposable()
     }
@@ -82,7 +83,6 @@ abstract class BaseViewModelActivity<T : ViewModel> : AppCompatActivity() {
     fun removeDisposable(tag: String) {
         observer.removeDisposable(tag)
     }
-
 
 
 }

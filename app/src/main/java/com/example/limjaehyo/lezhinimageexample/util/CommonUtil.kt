@@ -45,11 +45,13 @@ class CommonUtil {
 
             return retrofit.create(RetrofitAPI::class.java)
         }
+
+       //화면 가로 사이즈
         fun getWidth(context: Context): Int {
            val dm = context.applicationContext.resources.displayMetrics
            return dm.widthPixels
        }
-
+        //비율 세로사이즈
        fun  getRatioHeight(context: Context , originHeight : Int ,originWidth : Int) : Int{
            return (originHeight.toFloat() * getWidth(context) / originWidth.toFloat()).toInt()
        }

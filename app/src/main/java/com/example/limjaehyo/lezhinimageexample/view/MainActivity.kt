@@ -42,6 +42,8 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
         setMessageTextSetting("검색어를 입력해주세요")
         adapterInit()
 
+
+        //텍스트 메세지 리스트 visibility Subject
         mViewModel?.dataLayoutSubject?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe { visibility ->
                     if (visibility) {
@@ -52,6 +54,8 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                         rv_list.visibility = View.VISIBLE
                     }
                 }
+
+        //텍스트 입력 event
         RxTextView.textChanges(et_query)
                 .throttleLast(1, TimeUnit.SECONDS,AndroidSchedulers.mainThread())
                 .subscribe(
@@ -89,7 +93,7 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
 
     override fun getQueryImages(items: LiveData<PagedList<ImageQueryModel.Documents>>) {
         if (::adapter.isInitialized) {
-
+        //네트워크 상태 체크 LiveData
             mViewModel?.netWorkState?.observe(this, Observer { it ->
                 run {
                     if (it?.status == Status.FAILED) {
@@ -101,6 +105,8 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                     }
                 }
             })
+
+            //데이터 값 여부 LiveData
             mViewModel?.dataState?.observe(this, Observer { it ->
                 run {
                     if (it == true) {
@@ -109,7 +115,7 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                     }
                 }
             })
-
+            //받아온 데이터 PagedList 토스 LiveData
             items.observe(this, Observer { it ->
                 run {
                     adapter.submitList(it)
