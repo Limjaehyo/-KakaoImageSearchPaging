@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 
 
-class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryViewModel.ImageQueryViewModelInterface {
+class ImageQueryListActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryViewModel.ImageQueryViewModelInterface {
 
 
     private lateinit var adapter: ImageAdapter
@@ -36,7 +36,6 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Fresco.initialize(this)
         setMessageTextSetting(getString(R.string.input_text_plz))
         adapterInit()
 

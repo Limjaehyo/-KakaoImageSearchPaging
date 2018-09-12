@@ -9,7 +9,7 @@
         android:id="@+id/my_image_view"
         android:layout_width="@dimen/drawee_view_width"
         android:layout_height="@dimen/drawee_view_width"
-        fresco:actualImageScaleType="centerCrop" />
+        fresco:actualImageScaleType="focusCrop" />
 
     <android.support.v4.widget.ContentLoadingProgressBar
         android:id="@+id/progress_view"

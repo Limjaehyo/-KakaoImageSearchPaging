@@ -31,7 +31,7 @@
                 android:orientation="vertical"
                 fresco:layout_constraintGuide_end="16dp" />
 
-            <me.relex.photodraweeview.PhotoDraweeView
+            <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/my_image_view"
                 android:layout_width="@dimen/drawee_view_width"
                 android:layout_height="@dimen/drawee_view_width"
@@ -40,7 +40,9 @@
                 fresco:placeholderImage="@drawable/ic_placeholder"
                 fresco:placeholderImageScaleType="fitCenter"
                 fresco:progressBarAutoRotateInterval="1000"
-                fresco:actualImageScaleType="focusCrop" />
+                fresco:actualImageScaleType="focusCrop"  />
+
+
 
 
             <TextView

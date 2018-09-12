@@ -1,13 +1,9 @@
 package com.example.limjaehyo.lezhinimageexample.view
 
 import android.arch.lifecycle.ViewModel
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.WindowManager
 import com.afollestad.materialdialogs.MaterialDialog
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -39,7 +35,7 @@ abstract class BaseViewModelActivity<T : ViewModel> : AppCompatActivity() {
 
 
     private fun reStart() {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, ImageQueryListActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)

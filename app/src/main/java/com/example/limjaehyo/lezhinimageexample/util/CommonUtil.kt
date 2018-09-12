@@ -50,6 +50,10 @@ class CommonUtil {
            val dm = context.applicationContext.resources.displayMetrics
            return dm.widthPixels
        }
+       fun getHeight(context: Context): Int {
+           val dm = context.applicationContext.resources.displayMetrics
+           return dm.heightPixels
+       }
        fun  getRatioHeight(context: Context , originHeight : Int ,originWidth : Int) : Int{
            return (originHeight.toFloat() * getWidth(context) / originWidth.toFloat()).toInt()
        }
