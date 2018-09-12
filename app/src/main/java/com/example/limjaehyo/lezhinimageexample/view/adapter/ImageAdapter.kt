@@ -126,7 +126,6 @@ class ImageAdapter(private val context: Context,private val retryCallback: () ->
             val simpleDraweeView = itemView.findViewById<SimpleDraweeView>(R.id.my_image_view)
             val controllerBuilder = Fresco.newDraweeControllerBuilder()
 
-
             controllerBuilder.setUri(imageDoc?.image_url)
             controllerBuilder.oldController = simpleDraweeView.controller
             val ratioHeight = CommonUtil.getRatioHeight(context, imageDoc?.height?.toInt()
@@ -136,6 +135,7 @@ class ImageAdapter(private val context: Context,private val retryCallback: () ->
             draweeViewLayoutParams.width = CommonUtil.getWidth(context)
             draweeViewLayoutParams.height = ratioHeight / 2
             simpleDraweeView.layoutParams = draweeViewLayoutParams
+
             controllerBuilder.controllerListener = object : BaseControllerListener<ImageInfo>() {
                 override fun onFinalImageSet(id: String?, imageInfo: ImageInfo?, animatable: Animatable?) {
                     super.onFinalImageSet(id, imageInfo, animatable)
@@ -147,9 +147,7 @@ class ImageAdapter(private val context: Context,private val retryCallback: () ->
             }
             simpleDraweeView.controller = controllerBuilder.build()
 
-            val intent = Intent(context, ImageDetailActivity::class.java)
-            intent.putExtra("item", imageDoc)
-            simpleDraweeView.setOnClickListener { _: View? -> context.startActivity(intent) }
+            simpleDraweeView.setOnClickListener { _: View? -> context.startActivity( Intent(context, ImageDetailActivity::class.java).putExtra("item", imageDoc)) }
 
         }
 

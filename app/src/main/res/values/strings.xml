@@ -3,4 +3,6 @@
     <string name="et_query_hint">검색어를 입력해주세요</string>
 
     <string name="retry">Retry</string>
+    <string name="input_text_plz">검색어를 입력해주세요</string>
+    <string name="no_result">검색 결과가 없습니다.</string>
 </resources>

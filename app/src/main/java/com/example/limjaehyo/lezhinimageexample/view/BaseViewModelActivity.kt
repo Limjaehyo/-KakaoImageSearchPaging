@@ -28,12 +28,10 @@ abstract class BaseViewModelActivity<T : ViewModel> : AppCompatActivity() {
         observer = DisposableLifecycleObserver(lifecycle)
         lifecycle.addObserver(observer)
         try {
-            /*어플리케이션을 강제 종료하거나 메모리에서 삭제될경우 메소드 를 찾지못하는 어레발생 어리케이션을 찾지못할경우 catch 문으로 이동하고 앱을 재시작한다.*/
             if (application != null) {
                 mViewModel = viewModel()
             }
         } catch (e: Exception) {
-            /*리스타트할 처음 화면으로 로딩*/
             reStart()
         }
 
@@ -55,7 +53,6 @@ abstract class BaseViewModelActivity<T : ViewModel> : AppCompatActivity() {
 
     }
 
-    //key value 관리 map
     protected open fun putDisposableMap(tag: String, disposable: Disposable) {
         observer.putDisposableMap(tag, disposable)
 

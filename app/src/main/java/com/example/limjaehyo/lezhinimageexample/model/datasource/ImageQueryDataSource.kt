@@ -61,7 +61,6 @@ class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable,
     }
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, ImageQueryModel.Documents>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     private fun setRetry(action: Action?) {

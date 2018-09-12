@@ -26,12 +26,10 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
     lateinit var userList: LiveData<PagedList<ImageQueryModel.Documents>>
     lateinit var imageListDataSource: ImageQueryDataSourceFactory
     var dataLayoutSubject: PublishSubject<Boolean>
-    var keybordSubject: PublishSubject<Boolean>
 
     init {
         executor = Executors.newFixedThreadPool(5)
         dataLayoutSubject = PublishSubject.create()
-        keybordSubject = PublishSubject.create()
     }
 
 
@@ -59,7 +57,6 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
 
     }
 
-    //새로고침 호츨 메소드
     fun retry() {
         imageListDataSource.sourceFactoryLiveData.value!!.retry()
     }
@@ -84,6 +81,5 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
     override fun onCleared() {
         super.onCleared()
         dataLayoutSubject.onComplete()
-        keybordSubject.onComplete()
     }
 }

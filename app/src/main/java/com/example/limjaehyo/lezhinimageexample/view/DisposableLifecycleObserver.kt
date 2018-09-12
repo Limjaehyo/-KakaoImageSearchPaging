@@ -30,10 +30,7 @@ class DisposableLifecycleObserver(private var lifecycle: Lifecycle) : LifecycleO
 
     fun enable() {
         enabled = true
-        if (lifecycle.currentState.isAtLeast(STARTED)) {
-            // connect if not connected
 
-        }
     }
 
 

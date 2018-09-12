@@ -1,6 +1,5 @@
 package com.example.limjaehyo.lezhinimageexample.model.datasource
 
-import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize

@@ -19,8 +19,6 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
-import java.text.SimpleDateFormat
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -39,11 +37,10 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Fresco.initialize(this)
-        setMessageTextSetting("검색어를 입력해주세요")
+        setMessageTextSetting(getString(R.string.input_text_plz))
         adapterInit()
 
 
-        //텍스트 메세지 리스트 visibility Subject
         mViewModel?.dataLayoutSubject?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe { visibility ->
                     if (visibility) {
@@ -55,7 +52,6 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                     }
                 }
 
-        //텍스트 입력 event
         RxTextView.textChanges(et_query)
                 .throttleLast(1, TimeUnit.SECONDS,AndroidSchedulers.mainThread())
                 .subscribe(
@@ -65,7 +61,7 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                                 mViewModel?.getQueryImagesPaging(text.toString(), "recency")
                                 mViewModel?.dataLayoutSubject?.onNext(false)
                             } else {
-                                setMessageTextSetting("검색어를 입력해주세요")
+                                setMessageTextSetting(getString(R.string.input_text_plz))
                                 mViewModel?.dataLayoutSubject?.onNext(true)
                             }
                         }
@@ -93,29 +89,23 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
 
     override fun getQueryImages(items: LiveData<PagedList<ImageQueryModel.Documents>>) {
         if (::adapter.isInitialized) {
-        //네트워크 상태 체크 LiveData
             mViewModel?.netWorkState?.observe(this, Observer { it ->
                 run {
                     if (it?.status == Status.FAILED) {
                         setMessageTextSetting(it.message!!)
                         mViewModel?.dataLayoutSubject?.onNext(true)
-                    } else {
-//                        adapter.setNetworkState(it)
-
                     }
                 }
             })
 
-            //데이터 값 여부 LiveData
             mViewModel?.dataState?.observe(this, Observer { it ->
                 run {
                     if (it == true) {
-                        setMessageTextSetting("검색 결과가 없습니다.")
+                        setMessageTextSetting(getString(R.string.no_result))
                         mViewModel?.dataLayoutSubject?.onNext(true)
                     }
                 }
             })
-            //받아온 데이터 PagedList 토스 LiveData
             items.observe(this, Observer { it ->
                 run {
                     adapter.submitList(it)
