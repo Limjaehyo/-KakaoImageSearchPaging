@@ -121,7 +121,7 @@ class ImageAdapter(private val context: Context, private val retryCallback: () -
     class ImageItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bindTo(context: Context, imageDoc: ImageQueryModel.Documents?) {
-            val simpleDraweeView = itemView.findViewById(R.id.my_image_view) as SimpleDraweeView
+            val simpleDraweeView = itemView.findViewById<SimpleDraweeView>(R.id.my_image_view)
             val controllerBuilder = Fresco.newDraweeControllerBuilder()
 
 
@@ -134,7 +134,6 @@ class ImageAdapter(private val context: Context, private val retryCallback: () -
             draweeViewLayoutParams.width = CommonUtil.getWidth(context)
             draweeViewLayoutParams.height = ratioHeight / 2
             simpleDraweeView.layoutParams = draweeViewLayoutParams
-
             controllerBuilder.controllerListener = object : BaseControllerListener<ImageInfo>() {
                 override fun onFinalImageSet(id: String?, imageInfo: ImageInfo?, animatable: Animatable?) {
                     super.onFinalImageSet(id, imageInfo, animatable)

@@ -38,9 +38,9 @@ class DisposableLifecycleObserver(private var lifecycle: Lifecycle) : LifecycleO
 
 
     fun putDisposableMap(tag: String, disposable: Disposable) {
-        if (saveDisposableMap.get(tag) == null) {
+        if (saveDisposableMap[tag] == null) {
             mNetWorkDisposable.add(disposable)
-            saveDisposableMap.put(tag, disposable)
+            saveDisposableMap[tag] = disposable
         } else {
             mNetWorkDisposable.remove(saveDisposableMap[tag]!!)
             saveDisposableMap.remove(tag)
