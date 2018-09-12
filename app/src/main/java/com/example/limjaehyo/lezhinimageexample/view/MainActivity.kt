@@ -69,7 +69,7 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                             Log.e("text",text.toString())
                             if (text.isNotEmpty()) {
 
-
+                                removeDisposable("list")
                                 mViewModel?.dataLayoutSubject?.onNext(mViewBinding.tvMsg.visibility != View.VISIBLE)
                                 mViewModel?.getQueryImagesPaging(text.toString(), "recency")
                                 mViewModel?.dataLayoutSubject?.onNext(false)
@@ -80,12 +80,18 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                         }
                 ) { th -> run { Log.e("textChanges", th.message) } })
 
+        mViewModel?.keybordSubject?.observeOn(AndroidSchedulers.mainThread())
+                ?.throttleLast(1,TimeUnit.SECONDS)
+                ?.subscribe { _ ->
+                    imm.hideSoftInputFromWindow(mViewBinding.etQuery.windowToken, 0)
+                }
+
     }
 
 
 
     private fun adapterInit() {
-        adapter = ImageAdapter(this) {
+        adapter = ImageAdapter(this,mViewModel?.keybordSubject!!) {
             mViewModel?.retry()
         }
         setStaggeredSetting()
@@ -120,10 +126,10 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                         setMessageTextSetting("검색 결과가 없습니다.")
                         mViewModel?.dataLayoutSubject?.onNext(true)
                     }else{
-                        putDisposableMap("keybord", Completable.create { emitter: CompletableEmitter -> emitter.onComplete() }
-                                .delay(1,TimeUnit.SECONDS)
+                        /*putDisposableMap("keybord", Completable.create { emitter: CompletableEmitter -> emitter.onComplete() }
+                                .delay(1200,TimeUnit.MILLISECONDS)
                                 .subscribe({  imm.hideSoftInputFromWindow(mViewBinding.etQuery.windowToken, 0) }
-                                        , { t: Throwable -> Log.e("keybord",t.message)  }))
+                                        , { t: Throwable -> Log.e("keybord",t.message)  }))*/
 
                     }
                 }

@@ -52,6 +52,7 @@ class DisposableLifecycleObserver(private var lifecycle: Lifecycle) : LifecycleO
 
     fun removeDisposable(tag: String) {
         if (saveDisposableMap[tag] != null) {
+            saveDisposableMap[tag]?.dispose()
             mNetWorkDisposable.remove(saveDisposableMap[tag]!!)
             saveDisposableMap.remove(tag)
         }

@@ -98,4 +98,5 @@ abstract class BaseViewModelActivity<T : ViewModel> : AppCompatActivity() {
     }
 
 
+
 }

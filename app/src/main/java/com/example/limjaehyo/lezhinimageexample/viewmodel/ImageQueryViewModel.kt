@@ -26,10 +26,12 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
     lateinit var userList: LiveData<PagedList<ImageQueryModel.Documents>>
     lateinit var imageListDataSource: ImageQueryDataSourceFactory
     var dataLayoutSubject: PublishSubject<Boolean>
+    var keybordSubject: PublishSubject<Boolean>
 
     init {
         executor = Executors.newFixedThreadPool(5)
         dataLayoutSubject = PublishSubject.create()
+        keybordSubject = PublishSubject.create()
     }
 
 
@@ -48,7 +50,7 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
         refreshState = Transformations.switchMap<ImageQueryDataSource, NetworkState>(imageListDataSource.sourceFactoryLiveData) { it.initialLoad }
         dataState = Transformations.switchMap<ImageQueryDataSource, Boolean>(imageListDataSource.sourceFactoryLiveData) { it.isData }
         userList = LivePagedListBuilder(imageListDataSource, 20)
-                .setFetchExecutor(executor)
+//                .setFetchExecutor(executor)
                 .build()
 
 
@@ -77,5 +79,11 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
 
     interface ImageQueryViewModelInterface : BaseVewModelInterface {
         fun getQueryImages(items: LiveData<PagedList<ImageQueryModel.Documents>>)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        dataLayoutSubject.onComplete()
+        keybordSubject.onComplete()
     }
 }
