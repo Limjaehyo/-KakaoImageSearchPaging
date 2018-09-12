@@ -124,9 +124,9 @@ class ImageAdapter(private val context :Context, private val retryCallback: () -
         fun bindTo(context: Context ,imageDoc: ImageQueryModel.Documents?) {
             val simpleDraweeView = itemView.findViewById(R.id.my_image_view) as SimpleDraweeView
             val controllerBuilder = Fresco.newDraweeControllerBuilder()
+
             controllerBuilder.setUri(imageDoc?.image_url)
             controllerBuilder.oldController = simpleDraweeView.controller
-
             val ratioHeight = CommonUtil.getRatioHeight(context,imageDoc?.height?.toInt()?:0, imageDoc?.width?.toInt()?:0)
                     val layoutParams = simpleDraweeView.layoutParams
                     layoutParams.width = CommonUtil.getWidth(context)

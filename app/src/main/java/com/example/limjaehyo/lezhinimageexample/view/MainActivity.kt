@@ -21,8 +21,12 @@ import com.example.limjaehyo.lezhinimageexample.view.adapter.ImageAdapter
 import com.example.limjaehyo.lezhinimageexample.viewmodel.ImageQueryViewModel
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.jakewharton.rxbinding2.widget.RxTextView
+import io.reactivex.Completable
+import io.reactivex.CompletableEmitter
+import io.reactivex.CompletableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
 import java.util.concurrent.TimeUnit
 
@@ -67,7 +71,10 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { text ->
+                            Log.e("text",text.toString())
                             if (text.isNotEmpty()) {
+
+
                                 mViewModel?.dataLayoutSubject?.onNext(mViewBinding.tvMsg.visibility != View.VISIBLE)
                                 mViewModel?.getQueryImagesPaging(text.toString(), "recency")
                                 mViewModel?.dataLayoutSubject?.onNext(false)
@@ -76,7 +83,7 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                                 mViewModel?.dataLayoutSubject?.onNext(true)
                             }
                         }
-                ) { th -> run { Log.e("aa", th.message) } })
+                ) { th -> run { Log.e("textChanges", th.message) } })
     }
 
     private fun adapterInit() {
@@ -97,7 +104,11 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
 
     override fun getQueryImages(items: LiveData<PagedList<ImageQueryModel.Documents>>) {
         if (::adapter.isInitialized) {
-            imm.hideSoftInputFromWindow(mViewBinding.etQuery.windowToken, 0)
+            putDisposableMap("keybord", Completable.create { emitter: CompletableEmitter -> emitter.onComplete() }
+                    .delay(2,TimeUnit.SECONDS)
+                    .subscribe({  imm.hideSoftInputFromWindow(mViewBinding.etQuery.windowToken, 0) }
+                            , { t: Throwable -> Log.e("keybord",t.message)  }))
+
             mViewModel?.netWorkState?.observe(this, Observer { it ->
                 run {
                     if (it?.status == Status.FAILED) {
@@ -126,9 +137,6 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
                 }
             })
 
-
-        } else {
-            Log.e("adapter", "no Init")
 
         }
     }

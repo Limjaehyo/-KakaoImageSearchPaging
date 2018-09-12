@@ -24,7 +24,7 @@ class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable,
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, ImageQueryModel.Documents>) {
         networkStateLiveData.postValue(NetworkState.LOADING)
         initialLoad.postValue(NetworkState.LOADING)
-        compositeDisposable.add(ImageQueryRepository.instance.getResponse(query, sort, 1, 80)
+        viewModelInterface.putDisposableMap("list",ImageQueryRepository.instance.getResponse(query, sort, 1, 80)
                 .subscribeOn(Schedulers.io())
                 .subscribe({ imageQueryList ->
                     setRetry(null)
@@ -43,7 +43,7 @@ class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable,
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, ImageQueryModel.Documents>) {
         networkStateLiveData.postValue(NetworkState.LOADING)
-        compositeDisposable.add(ImageQueryRepository.instance.getResponse(query, "recency", params.key + 1, 80)
+        viewModelInterface.putDisposableMap("list",ImageQueryRepository.instance.getResponse(query, sort, params.key + 1, 80)
                 .subscribeOn(Schedulers.io())
                 .subscribe({ imageQueryList ->
                     networkStateLiveData.postValue(NetworkState.LOADED)

@@ -11,9 +11,9 @@ import android.arch.lifecycle.Lifecycle.State.STARTED
 class DisposableLifecycleObserver(private var lifecycle: Lifecycle) : LifecycleObserver {
 
     private var enabled = false
-    private val mNetWorkDisposable = CompositeDisposable()
+    private var mNetWorkDisposable = CompositeDisposable()
     private val mDisposable = CompositeDisposable()
-    private val saveDisposableMap = HashMap<String, Disposable>()
+    private var saveDisposableMap = HashMap<String, Disposable>()
 
     init {
         lifecycle.addObserver(this)
@@ -23,7 +23,8 @@ class DisposableLifecycleObserver(private var lifecycle: Lifecycle) : LifecycleO
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun start() {
         if (enabled) {
-            // connect
+            mNetWorkDisposable = CompositeDisposable()
+            saveDisposableMap = HashMap()
         }
     }
 
