@@ -43,9 +43,6 @@ class ImageQueryViewModel(application: Application, viewModelInterface: ImageQue
     }
 
     fun getQueryImagesPaging(paging: String, sort: String) {
-        if (::userList.isInitialized) {
-            userList.value?.dataSource?.invalidate()
-        }
         imageListDataSource = ImageQueryDataSourceFactory(compositeDisposable, paging, sort,viewModelInterface)
         netWorkState = Transformations.switchMap<ImageQueryDataSource, NetworkState>(imageListDataSource.sourceFactoryLiveData) { it.networkStateLiveData }
         refreshState = Transformations.switchMap<ImageQueryDataSource, NetworkState>(imageListDataSource.sourceFactoryLiveData) { it.initialLoad }
