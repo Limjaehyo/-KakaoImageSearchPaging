@@ -35,14 +35,8 @@ class ImageQueryDataSource(private val compositeDisposable: CompositeDisposable,
                     callback.onResult(imageQueryList.documents, null, 2)
 
                 }) { throwable ->
-
                     setRetry(Action { loadInitial(params, callback) })
                     networkStateLiveData.postValue(NetworkState.error(throwable.message))
-                /*    compositeDisposable.add(Completable.create { emitter -> emitter.onComplete() }
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({
-                        viewModelInterface.showMessageDialog(throwable?.message?:"")
-                    }, { Log.e("Completable",throwable?.message) }))*/
                     initialLoad.postValue(NetworkState.error(throwable.message))
                 })
     }

@@ -79,20 +79,6 @@ abstract class BaseViewModelActivity<T : ViewModel> : AppCompatActivity() {
     }
 
 
-    fun showCustomDialog(context: Context, msg: String): MaterialDialog {
-        this.materialDialog = MaterialDialog.Builder(context).build()
-        materialDialog?.setTitle("알림")
-        materialDialog?.setContent(msg)
-        if (materialDialog?.window != null) {
-            materialDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            val width = (context.resources.displayMetrics.widthPixels * 0.90).toInt()
-            materialDialog?.window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
-        }
-        materialDialog?.setCanceledOnTouchOutside(false)
-
-        return materialDialog!!
-    }
-
     fun removeDisposable(tag: String) {
         observer.removeDisposable(tag)
     }

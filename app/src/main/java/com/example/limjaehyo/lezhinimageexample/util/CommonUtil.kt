@@ -36,8 +36,6 @@ class CommonUtil {
                 logging.level = HttpLoggingInterceptor.Level.HEADERS
             }
 
-
-            //        httpClient.readTimeout(60, TimeUnit.SECONDS);
             val retrofit = Retrofit.Builder()
                     .baseUrl("https://dapi.kakao.com/")
                     .client(httpClient.build())

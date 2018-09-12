@@ -126,9 +126,6 @@ class MainActivity : BaseViewModelActivity<ImageQueryViewModel>(), ImageQueryVie
         tv_msg.text = msg
     }
 
-    override fun showMessageDialog(msg: String) {
-        super.showCustomDialog(this, msg).show()
-    }
 
     override fun putDisposableMap(tag: String, disposable: Disposable) {
         super.putDisposableMap(tag, disposable)
