@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModel
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.afollestad.materialdialogs.MaterialDialog
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -15,7 +14,6 @@ abstract class BaseViewModelActivity<T : ViewModel> : AppCompatActivity() {
     protected abstract fun viewModel(): T
 
     protected var mViewModel: T? = null
-    private var materialDialog: MaterialDialog? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,15 +52,7 @@ abstract class BaseViewModelActivity<T : ViewModel> : AppCompatActivity() {
 
     }
 
-    override fun onStop() {
-        super.onStop()
-        if (materialDialog != null) {
-            if (materialDialog!!.isShowing) {
-                materialDialog!!.dismiss()
-            }
-        }
 
-    }
 
     fun getDisposable(): CompositeDisposable {
         return observer.getDisposable()

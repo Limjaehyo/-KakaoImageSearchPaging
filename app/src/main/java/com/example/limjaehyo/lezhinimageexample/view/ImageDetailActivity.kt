@@ -31,7 +31,7 @@ class ImageDetailActivity : AppCompatActivity() {
         simpleDraweeView.layoutParams = layoutParams
         simpleDraweeView.setOnClickListener { _: View? -> startActivity( Intent(this, TransformImageActivity::class.java).putExtra("image_url", parcelable.image_url)) }
 
-        findViewById<TextView>(R.id.tv_departure).text = String.format(Locale.KOREA,"출저: %s",parcelable.display_sitename)
+        findViewById<TextView>(R.id.tv_departure).text = String.format(Locale.KOREA,"출처: %s",parcelable.display_sitename)
         findViewById<TextView>(R.id.tv_doc_url).text =String.format(Locale.KOREA,"문서 URL: %s",parcelable.doc_url)
 
 
