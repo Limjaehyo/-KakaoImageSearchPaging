@@ -6,7 +6,7 @@
 
 ## Screenshot
 
-![Screenshot_1537159735](https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159735.png =100x20)
+![Screenshot_1537159735](https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159735.png)
 
 
 ![Screenshot_1537159751](https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159751.png)
