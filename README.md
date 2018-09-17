@@ -16,10 +16,9 @@ KAKAO Image Search Restful API를 이용한 Android Paging Example
 
 ## Screenshot
 <img src="https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159735.png" width="250" height="400" />
-<img src="https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159751.png" width="250" height="400" />
 
 <img src="https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159878.png" width="250" height="400" />
 
 <img src="https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159882.png" width="250" height="400" />
 
-
+<img src="https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159897.png" width="250" height="400" />
