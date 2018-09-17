@@ -15,20 +15,11 @@ KAKAO Image Search Restful API를 이용한 Android Paging Example
 11. logging-interceptor
 
 ## Screenshot
+<img src="https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159735.png" width="250" height="400" />
+<img src="https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159751.png" width="250" height="400" />
 
-![Screenshot_1537159735](https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159735.png)
+<img src="https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159878.png" width="250" height="400" />
 
-
-![Screenshot_1537159751](https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159751.png)
-
-
-
-![Screenshot_1537159756](https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159756.png)
+<img src="https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159882.png" width="250" height="400" />
 
 
-
-![Screenshot_1537159878](https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159878.png)
-
-
-
-![Screenshot_1537159882](https://github.com/Limjaehyo/-KakaoImageSearchPaging/blob/master/Screenshot_1537159882.png)
